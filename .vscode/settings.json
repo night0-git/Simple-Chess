@@ -1,0 +1,9 @@
+{
+    "terminal.integrated.inheritEnv": true,
+    "terminal.integrated.env.windows": {
+        "PATH": "${env:PATH};C:\\.External Libraries\\vcpkg"
+    },
+    "cmake.configureSettings": {
+        "CMAKE_TOOLCHAIN_FILE": "C:\\.External Libraries\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+    }
+}

@@ -1,0 +1,15 @@
+# Build directory
+build/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+
+# VS Code
+.vscode/
+
+# Executables
+*.exe
+
+# vcpkg
+vcpkg_installed/
