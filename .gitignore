@@ -2,8 +2,6 @@
 build/
 
 # CMake
-CMakeCache.txt
-CMakeFiles/
 CMakeUserPresets.json
 
 # VS Code
@@ -12,5 +10,3 @@ CMakeUserPresets.json
 # Executables
 *.exe
 
-# vcpkg
-vcpkg_installed/
