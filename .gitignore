@@ -1,9 +1,10 @@
 # Build directory
 build/
 
-# CMake generated files
+# CMake
 CMakeCache.txt
 CMakeFiles/
+CMakeUserPresets.json
 
 # VS Code
 .vscode/

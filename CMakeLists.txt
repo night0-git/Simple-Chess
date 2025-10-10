@@ -1,19 +1,36 @@
 cmake_minimum_required(VERSION 3.10)
-project(Chess)
+
+project(Simple2DChess)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Source and header directories
-include_directories(include)
-file(GLOB SOURCES source/*.cpp)
+include(FetchContent)
 
-# Find SFML
-find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
+FetchContent_Declare(
+    SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 3.0.2
+)
 
-add_executable(Chess ${SOURCES})
-target_link_libraries(Chess sfml-graphics sfml-window sfml-system)
+FetchContent_MakeAvailable(SFML)
 
-# Copy assets to build directory
-add_custom_command(TARGET Chess POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Chess>/assets)
+add_executable(${PROJECT_NAME}
+    src/main.cpp
+    src/game.cpp
+    src/board.cpp
+    src/piece.cpp
+    src/utils.cpp
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/include")
+
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    SFML::Graphics
+    SFML::Window
+    SFML::System
+    SFML::Audio
+    SFML::Network
+)
