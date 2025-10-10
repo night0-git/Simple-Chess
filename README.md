@@ -1,1 +1,2 @@
-# Simple-2D-Chess
+# Simple Chess
+My first ever project
