@@ -20,3 +20,5 @@ void GameWindow::run() {
 void GameWindow::loadResources() {
     
 }
+
+// TODO: Fix git not applying renamed files
