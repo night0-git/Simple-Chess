@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(Simple2DChess)
+project(SimpleChess)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -17,10 +17,11 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
-    src/game.cpp
-    src/board.cpp
-    src/piece.cpp
-    src/utils.cpp
+    src/Game.cpp
+    src/Board.cpp
+    src/Piece.cpp
+    src/Utils.cpp
+    src/GameWindow.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/include")
