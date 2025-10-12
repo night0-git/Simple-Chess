@@ -3,4 +3,4 @@
 #include "Board.h"
 
 // Board bound check
-bool isWithinBoard(int x, int y);
+bool isWithinBoard(sf::Vector2i pos);

@@ -5,8 +5,8 @@
 #include <map>
 
 const unsigned int TILE_SIZE = 80;
-const unsigned int WINDOW_WIDTH = TILE_SIZE * BOARD_SIZE;
-const unsigned int WINDOW_HEIGHT = TILE_SIZE * BOARD_SIZE;
+const unsigned int WINDOW_WIDTH = TILE_SIZE * Board::SIZE;
+const unsigned int WINDOW_HEIGHT = TILE_SIZE * Board::SIZE;
 
 
 class GameWindow {

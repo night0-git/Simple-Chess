@@ -5,70 +5,74 @@ Board::Board() {
     setupDefaultBoard();
 }
 
-Piece Board::getPieceAt(int row, int col) const {
-    if (row >= 0 && row <= BOARD_SIZE && col >= 0 && col <= BOARD_SIZE) {
-        return grid[row][col];
-    }
-    return Piece();
-}
-
 void Board::setupDefaultBoard() {
-    // Set up black pieces (on top)
-    grid[0][0] = Piece(PieceType::Rook, PieceColor::Black);
-    grid[0][1] = Piece(PieceType::Knight, PieceColor::Black);
-    grid[0][2] = Piece(PieceType::Bishop, PieceColor::Black);
-    grid[0][3] = Piece(PieceType::King, PieceColor::Black);
-    grid[0][4] = Piece(PieceType::Queen, PieceColor::Black);
-    grid[0][5] = Piece(PieceType::Bishop, PieceColor::Black);
-    grid[0][6] = Piece(PieceType::Knight, PieceColor::Black);
-    grid[0][7] = Piece(PieceType::Rook, PieceColor::Black);
-    for (int col = 0; col < BOARD_SIZE; ++col) {
-        grid[1][col] = Piece(PieceType::Pawn, PieceColor::Black);
+    // Place pawns
+    for (int col = 0; col < SIZE; ++col) {
+        grid[1][col] = std::make_unique<Piece>(PieceType::Pawn, PieceColor::Black);
+        grid[SIZE - 2][col] = std::make_unique<Piece>(PieceType::Pawn, PieceColor::White);
     }
 
-    // Set up white pieces (at bottom)
-    grid[7][0] = Piece(PieceType::Rook, PieceColor::White);
-    grid[7][1] = Piece(PieceType::Knight, PieceColor::White);
-    grid[7][2] = Piece(PieceType::Bishop, PieceColor::White);
-    grid[7][3] = Piece(PieceType::King, PieceColor::White);
-    grid[7][4] = Piece(PieceType::Queen, PieceColor::White);
-    grid[7][5] = Piece(PieceType::Bishop, PieceColor::White);
-    grid[7][6] = Piece(PieceType::Knight, PieceColor::White);
-    grid[7][7] = Piece(PieceType::Rook, PieceColor::White);
-    for (int col = 0; col < BOARD_SIZE; ++col) {
-        grid[6][col] = Piece(PieceType::Pawn, PieceColor::White);
-    }
+    // Place other pieces
+    // Black
+    grid[0][0] = std::make_unique<Piece>(PieceType::Rook, PieceColor::Black);
+    grid[0][1] = std::make_unique<Piece>(PieceType::Knight, PieceColor::Black);
+    grid[0][2] = std::make_unique<Piece>(PieceType::Bishop, PieceColor::Black);
+    grid[0][3] = std::make_unique<Piece>(PieceType::King, PieceColor::Black);
+    grid[0][4] = std::make_unique<Piece>(PieceType::Queen, PieceColor::Black);
+    grid[0][5] = std::make_unique<Piece>(PieceType::Bishop, PieceColor::Black);
+    grid[0][6] = std::make_unique<Piece>(PieceType::Knight, PieceColor::Black);
+    grid[0][7] = std::make_unique<Piece>(PieceType::Rook, PieceColor::Black);
+    // White
+    grid[SIZE - 1][0] = std::make_unique<Piece>(PieceType::Rook, PieceColor::White);
+    grid[SIZE - 1][1] = std::make_unique<Piece>(PieceType::Bishop, PieceColor::White);
+    grid[SIZE - 1][2] = std::make_unique<Piece>(PieceType::Knight, PieceColor::White);
+    grid[SIZE - 1][3] = std::make_unique<Piece>(PieceType::King, PieceColor::White);
+    grid[SIZE - 1][4] = std::make_unique<Piece>(PieceType::Queen, PieceColor::White);
+    grid[SIZE - 1][5] = std::make_unique<Piece>(PieceType::Bishop, PieceColor::White);
+    grid[SIZE - 1][6] = std::make_unique<Piece>(PieceType::Knight, PieceColor::White);
+    grid[SIZE - 1][7] = std::make_unique<Piece>(PieceType::Rook, PieceColor::White);
 }
 
-void Board::printBoard() const {
-    for (int row = 0; row < BOARD_SIZE; ++row) {
-        for (int col = 0; col < BOARD_SIZE; ++col) {
-            Piece piece = getPieceAt(row, col);
-            char pieceChar;
-            switch (piece.getType()) {
-                case PieceType::King:   pieceChar = 'K'; break;
-                case PieceType::Queen:  pieceChar = 'Q'; break;
-                case PieceType::Rook:   pieceChar = 'R'; break;
-                case PieceType::Bishop: pieceChar = 'B'; break;
-                case PieceType::Knight: pieceChar = 'N'; break;
-                case PieceType::Pawn:   pieceChar = 'P'; break;
-                case PieceType::Empty:  pieceChar = '.'; break;
-            }
+Piece* Board::getPieceAt(sf::Vector2i pos) const {
+    if (isWithinBoard(pos)) {
+        return grid[pos.y][pos.x].get();
+    }
+    return nullptr;
+}
 
-            if (piece.getColor() == PieceColor::Black) {
-                pieceChar = tolower(pieceChar);
-            }
+std::unique_ptr<Piece> Board::movePiece(sf::Vector2i src, sf::Vector2i dest) {
+    if (!isWithinBoard(src) || !isWithinBoard(dest)) {
+        return nullptr;
+    }
+    // Return nullptr if src is empty
+    if (!grid[src.y][src.x]) {
+        return nullptr;
+    }
 
-            std::cout << pieceChar << " ";
+    // srcPiece takes ownership of the piece from src, leave src as nullptr
+    std::unique_ptr<Piece> srcPiece = std::move(grid[src.y][src.x]);
+    // destPiece takes ownership of whaterver is in dest
+    std::unique_ptr<Piece> destPiece = std::move(grid[dest.y][dest.x]);
+    // Onwership is transferred from srcPiece to dest square
+    grid[dest.y][dest.x] = std::move(srcPiece);
+
+    // Return the ownership of the captured piece
+    return destPiece;
+}
+
+
+bool Board::isValidSquare(PieceColor srcColor, sf::Vector2i dest) const {
+    if (isWithinBoard(dest)) {
+        Piece* targetedSquare = getPieceAt(dest);
+        // Cannot capture own piece
+        if (targetedSquare && (targetedSquare->getColor() == srcColor)) {
+            return false;
         }
-        std::cout << "\n";
+        return true;
     }
+    return false;
 }
 
-void Board::movePiece(sf::Vector2i src, sf::Vector2i dest) {
-    if (!isWithinBoard(src.x, src.y) || !isWithinBoard(dest.x, dest.y)) {
-        return;
-    }
-    grid[dest.x][dest.y] = grid[src.x][src.y];
-    grid[src.x][dest.y] = Piece();
+bool Board::isWithinBoard(sf::Vector2i pos) {
+    return (pos.x >= 0 && pos.x < SIZE && pos.y >= 0 && pos.y < SIZE);
 }

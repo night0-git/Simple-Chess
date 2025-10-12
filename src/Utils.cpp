@@ -1,6 +1,6 @@
 #include "Utils.h"
 
 
-bool isWithinBoard(int x, int y) {
-    return (x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE);
+bool isWithinBoard(sf::Vector2i pos) {
+    return (pos.x >= 0 && pos.x < Board::SIZE && pos.y >= 0 && pos.y < Board::SIZE);
 }
