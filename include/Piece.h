@@ -19,7 +19,7 @@ public:
     virtual ~Piece() = default;
 
     // Pure virtual function for getting valid moves, each piece must implement this
-    virtual std::vector<sf::Vector2i> getValidMoves(sf::Vector2i currentPos, const Board& board) const = 0;
+    virtual std::vector<sf::Vector2i> getValidMoves(sf::Vector2i currentSquare, const Board& board) const = 0;
 
     // Draw the piece sprite to given target
     void draw(sf::RenderTarget& target) const;

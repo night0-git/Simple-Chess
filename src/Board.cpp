@@ -33,9 +33,9 @@ void Board::setupDefaultBoard() {
     grid[SIZE - 1][7] = std::make_unique<Piece>(PieceType::Rook, PieceColor::White);
 }
 
-Piece* Board::getPieceAt(sf::Vector2i pos) const {
-    if (isWithinBoard(pos)) {
-        return grid[pos.y][pos.x].get();
+Piece* Board::getPieceAt(sf::Vector2i square) const {
+    if (isWithinBoard(square)) {
+        return grid[square.y][square.x].get();
     }
     return nullptr;
 }
@@ -61,7 +61,7 @@ std::unique_ptr<Piece> Board::movePiece(sf::Vector2i src, sf::Vector2i dest) {
 }
 
 
-bool Board::isValidSquare(PieceColor srcColor, sf::Vector2i dest) const {
+bool Board::isValidMove(PieceColor srcColor, sf::Vector2i dest) const {
     if (isWithinBoard(dest)) {
         Piece* targetedSquare = getPieceAt(dest);
         // Cannot capture own piece
@@ -73,6 +73,6 @@ bool Board::isValidSquare(PieceColor srcColor, sf::Vector2i dest) const {
     return false;
 }
 
-bool Board::isWithinBoard(sf::Vector2i pos) {
-    return (pos.x >= 0 && pos.x < SIZE && pos.y >= 0 && pos.y < SIZE);
+bool Board::isWithinBoard(sf::Vector2i square) {
+    return (square.x >= 0 && square.x < SIZE && square.y >= 0 && square.y < SIZE);
 }
