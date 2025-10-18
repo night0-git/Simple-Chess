@@ -36,6 +36,7 @@ void GameWindow::render() {
     window.clear();
 
     resourceManager.draw(window, board, TILE_SIZE);
+    // resourceManager.testDraw(window);
 
     window.display();
 }
