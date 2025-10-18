@@ -4,12 +4,12 @@
 Rook::Rook(PieceColor color) : Piece(PieceType::Rook, color) {}
 
 std::vector<sf::Vector2i> Rook::getValidMoves(sf::Vector2i currentSquare, const Board& board) const {
-    return getSlidingMoves(currentSquare, board, this->getColor());
+    return getSlidingMoves(currentSquare, board, color);
 }
 
-std::vector<sf::Vector2i> getSlidingMoves(sf::Vector2i currentSquare, const Board& board, PieceColor color) {
+std::vector<sf::Vector2i> Rook::getSlidingMoves(sf::Vector2i currentSquare, const Board& board, PieceColor color) {
     std::vector<sf::Vector2i> validMoves;
-    validMoves.reserve(board.SIZE * 2);
+    validMoves.reserve(Board::SIZE * 2);
     
     // Rook moves vertically and horizontally
     std::array<std::array<int, 2>, 4> dir = {{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}};

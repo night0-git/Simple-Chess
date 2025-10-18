@@ -1,24 +1,43 @@
 #include "GameWindow.h"
+#include <iostream>
+
 
 GameWindow::GameWindow() :
     window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "Simple Chess"),
-    currentPlayerTurn(PieceColor::White),
-    selectedSquare(std::nullopt)
-{
-    window.setFramerateLimit(60);
-    loadResources();
-}
+    board(),
+    resourceManager()
+{};
 
 void GameWindow::run() {
     while (window.isOpen()) {
-        processEvents();
+        handleEvents();
+
+
+
         update();
         render();
     }
 }
 
-void GameWindow::loadResources() {
-    
+void GameWindow::handleEvents() {
+    while (const std::optional event = window.pollEvent()) {
+        if (event->is<sf::Event::Closed>()) {
+            window.close();
+        }
+
+    }
 }
 
-// TODO: Fix git not applying renamed files
+void GameWindow::update() {
+
+}
+
+void GameWindow::render() {
+    window.clear();
+
+    resourceManager.draw(window, board, TILE_SIZE);
+
+    window.display();
+}
+
+
