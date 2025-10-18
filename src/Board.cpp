@@ -22,8 +22,8 @@ void Board::setupDefaultBoard() {
     grid[0][0] = std::make_unique<Rook>(PieceColor::Black);
     grid[0][1] = std::make_unique<Knight>(PieceColor::Black);
     grid[0][2] = std::make_unique<Bishop>(PieceColor::Black);
-    grid[0][3] = std::make_unique<King>(PieceColor::Black);
-    grid[0][4] = std::make_unique<Queen>(PieceColor::Black);
+    grid[0][3] = std::make_unique<Queen>(PieceColor::Black);
+    grid[0][4] = std::make_unique<King>(PieceColor::Black);
     grid[0][5] = std::make_unique<Bishop>(PieceColor::Black);
     grid[0][6] = std::make_unique<Knight>(PieceColor::Black);
     grid[0][7] = std::make_unique<Rook>(PieceColor::Black);
@@ -32,8 +32,8 @@ void Board::setupDefaultBoard() {
     grid[SIZE - 1][0] = std::make_unique<Rook>(PieceColor::White);
     grid[SIZE - 1][1] = std::make_unique<Knight>(PieceColor::White);
     grid[SIZE - 1][2] = std::make_unique<Bishop>(PieceColor::White);
-    grid[SIZE - 1][3] = std::make_unique<King>(PieceColor::White);
-    grid[SIZE - 1][4] = std::make_unique<Queen>(PieceColor::White);
+    grid[SIZE - 1][3] = std::make_unique<Queen>(PieceColor::White);
+    grid[SIZE - 1][4] = std::make_unique<King>(PieceColor::White);
     grid[SIZE - 1][5] = std::make_unique<Bishop>(PieceColor::White);
     grid[SIZE - 1][6] = std::make_unique<Knight>(PieceColor::White);
     grid[SIZE - 1][7] = std::make_unique<Rook>(PieceColor::White);

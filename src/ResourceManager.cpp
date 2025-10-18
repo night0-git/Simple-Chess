@@ -18,7 +18,7 @@ void ResourceManager::draw(sf::RenderWindow& window, const Board& board, int TIL
             sf::Vector2f currPos = {float(col) * TILE_SIZE, float(row) * TILE_SIZE};
 
             // Draw square
-            bool isLightSqr = ((row + col) % 2 != 0);
+            bool isLightSqr = ((row + col) % 2 == 0);
             if (isLightSqr) {
                 boardSprite.setTextureRect(lightSqrRect);
             }
