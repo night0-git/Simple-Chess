@@ -7,30 +7,48 @@ std::vector<sf::Vector2i> Pawn::getValidMoves(sf::Vector2i currentSquare, const 
     std::vector<sf::Vector2i> validMoves;
     validMoves.reserve(4);  // Pawn can move to 4 squares
 
-    PieceColor color = this->getColor();
-
     int forward = (color == PieceColor::Black ? 1 : -1);
 
+    std::array<sf::Vector2i, 4> moves = {{
+        currentSquare + sf::Vector2i(forward, 0), 
+        currentSquare + sf::Vector2i(2 * forward, 0), 
+        currentSquare + sf::Vector2i(forward, 1), 
+        currentSquare + sf::Vector2i(forward, -1)
+    }};
 
-    // Check first front square
-    sf::Vector2i firstFrontMove = {currentSquare.y + forward, currentSquare.x};
-    if (board.isValidMove(color, firstFrontMove)) {
-        validMoves.push_back({firstFrontMove});
-        // Second front square
-        sf::Vector2i secondFrontMove = {currentSquare.y + (2 * forward), currentSquare.x};
-        if (board.isValidMove(color, secondFrontMove)) {
-            validMoves.push_back(secondFrontMove);
+    if (board.isValidMove(color, moves[0]) && !board.getPieceAt(moves[0])) {
+        validMoves.push_back(moves[0]);
+        if (board.isValidMove(color, moves[1]) && !hasMoved && !board.getPieceAt(moves[1])) {
+            validMoves.push_back(moves[1]);
         }
     }
-    // Check diagonal squares
-    sf::Vector2i firstDiagonalSquare = {currentSquare.y + forward, currentSquare.x - 1};
-    if (board.isValidMove(color, firstDiagonalSquare)) {
-        validMoves.push_back(firstDiagonalSquare);
+
+    if (board.isValidMove(color, moves[2])) {
+        if (board.getPieceAt(moves[2])) {
+            validMoves.push_back(moves[2]);
+        }
+        // En passant
+        else {
+            if (board.getEnPassantTarget() && moves[2] == *board.getEnPassantTarget()) {
+                validMoves.push_back(moves[2]);
+            }
+        }
     }
-    sf::Vector2i secondDiagonalSquare = {currentSquare.y + forward, currentSquare.x + 1};
-    if (board.isValidMove(color, secondDiagonalSquare)) {
-        validMoves.push_back(secondDiagonalSquare);
+
+    if (board.isValidMove(color, moves[3])) {
+        if (board.getPieceAt(moves[3])) {
+            validMoves.push_back(moves[3]);
+        }
+        // En passant
+        else {
+            if (board.getEnPassantTarget() && moves[3] == *board.getEnPassantTarget()) {
+                validMoves.push_back(moves[3]);
+            }
+        }
     }
+
+    // TODO: promotion
+
 
     return validMoves;
 }

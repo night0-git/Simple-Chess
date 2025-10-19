@@ -1,9 +1,7 @@
 #include "ResourceManager.h"
 #include <iostream>
 
-#define SET_PIECE_RECT(type, color, row, x1, x2) \
-    pieceRects[{PieceType::type, PieceColor::color}] = {{x1, row * SQUARE_SIZE}, {x2 - x1, SQUARE_SIZE}}
-
+// Set asset path here
 const std::string ResourceManager::pathToBoardAtlas = "../../assets/custom chess assets/board/squares.png";
 const std::string ResourceManager::pathToPieceAtlas = "../../assets/custom chess assets/pieces/pieces.png";
 
@@ -35,17 +33,20 @@ void ResourceManager::draw(sf::RenderWindow& window, const Board& board, int TIL
                 sf::IntRect rect = pieceRects[{piece->getType(), piece->getColor()}];
                 pieceSprite.setTextureRect(rect);
 
-                float pieceScale = float(TILE_SIZE) / SQUARE_SIZE * 0.73f;
-                sf::Vector2f scaledPieceSize = {rect.size.x * pieceScale, rect.size.y * pieceScale};
-                sf::Vector2f offset = {(TILE_SIZE - scaledPieceSize.x) / 2.0f, (TILE_SIZE - scaledPieceSize.y) / 2.0f};
+                float scale = getAbsoluteScale(0.73f, TILE_SIZE);
+                pieceSprite.setScale({scale, scale});
 
-                pieceSprite.setPosition(currPos + offset);
-                pieceSprite.setScale({float(TILE_SIZE) / SQUARE_SIZE * 0.73f, float(TILE_SIZE) / SQUARE_SIZE * 0.73f});
+                sf::Vector2f scaledPieceSize = {rect.size.x * scale, rect.size.y * scale};
+                pieceSprite.setPosition(getCenteredPos(currPos, scaledPieceSize, TILE_SIZE));
+
                 window.draw(pieceSprite);
             }
         }
     }
 }
+
+#define SET_PIECE_RECT(type, color, row, x1, x2) \
+    pieceRects[{PieceType::type, PieceColor::color}] = {{x1, row * SQUARE_SIZE}, {x2 - x1, SQUARE_SIZE}}
 
 void ResourceManager::setTextureRects() {
     // Board
@@ -82,8 +83,13 @@ void ResourceManager::getAssets() {
     }
 }
 
-void ResourceManager::testDraw(sf::RenderWindow& window) {
-    sf::Sprite testSprite(pieceAtlas);
-    testSprite.setTextureRect(pieceRects[{PieceType::King, PieceColor::White}]);
-    window.draw(testSprite);
+float ResourceManager::getAbsoluteScale(float relativeScale, int TILE_SIZE) const {
+    float baseScale = float(TILE_SIZE) / SQUARE_SIZE;
+    float absoluteScale = baseScale * relativeScale;
+    return absoluteScale;
+}
+
+sf::Vector2f ResourceManager::getCenteredPos(sf::Vector2f squarePos, sf::Vector2f textureRect, int TILE_SIZE) const {
+    sf::Vector2f offset = {(TILE_SIZE - textureRect.x) / 2.0f, (TILE_SIZE - textureRect.y) / 2.0f};
+    return (squarePos + offset);
 }

@@ -23,11 +23,11 @@ public:
     // Getters
     PieceType getType() const;
     PieceColor getColor() const;
+    bool hasMoved;
+    
 
 protected:
     PieceType type;
     PieceColor color;
-
-    bool hasMoved;
 };
 

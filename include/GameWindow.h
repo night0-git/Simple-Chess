@@ -1,9 +1,10 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <string>
+#include <optional>
 #include "Board.h"
 #include "ResourceManager.h"
-#include <string>
 
 class GameWindow {
 public:
@@ -24,4 +25,9 @@ private:
     sf::RenderWindow window;
     Board board;
     ResourceManager resourceManager;
+    std::vector<std::unique_ptr<Piece>> discardedPieces;
+
+    std::optional<sf::Vector2i> selectedSquare;
+    PieceColor currentTurn;
+    // TODO: checkmate
 };

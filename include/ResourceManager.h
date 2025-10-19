@@ -8,24 +8,29 @@ class ResourceManager {
 public:
     ResourceManager();
 
-    void testDraw(sf::RenderWindow& window);
-
     void draw(sf::RenderWindow& window, const Board& board, int TILE_SIZE);
 
 private:
-    sf::Sprite pieceSprite;
-    sf::Sprite boardSprite;
-
     static const std::string pathToBoardAtlas;
     static const std::string pathToPieceAtlas;
+
+    // Graphics
+    sf::Sprite pieceSprite;
+    sf::Sprite boardSprite;
     sf::Texture pieceAtlas;
     sf::Texture boardAtlas;
-
+    
     std::map<std::pair<PieceType, PieceColor>, sf::IntRect> pieceRects;
     sf::IntRect lightSqrRect;
     sf::IntRect darkSqrRect;
+
+    // Initializer methods
     void setTextureRects();
     void getAssets();
+
+    // Helper methods
+    float getAbsoluteScale(float relativeScale, int TILE_SIZE) const;   // Relative scale is piece/square scale
+    sf::Vector2f getCenteredPos(sf::Vector2f squarePos, sf::Vector2f textureRect, int TILE_SIZE) const;
 
     const int SQUARE_SIZE = 256;
     const int PAWN_WIDTH = 209;

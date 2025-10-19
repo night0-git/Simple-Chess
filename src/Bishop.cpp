@@ -11,14 +11,18 @@ std::vector<sf::Vector2i> Bishop::getDiagonalMoves(sf::Vector2i currentSquare, c
     std::vector<sf::Vector2i> validMoves;
     validMoves.reserve(Board::SIZE * 2);
     // Bishop moves diagonally
-    std::array<std::array<int, 2>, 4> dir = {{{1, 1}, {1, -1}, {-1, -1}, {-1, 1}}};
-    for (int i = 0; i < 4; ++i) {
-        int row = currentSquare.y + dir[i][0];
-        int col = currentSquare.x + dir[i][1];
-        while(board.isValidMove(color, {row, col})) {
-            validMoves.push_back({row, col});
-            row += dir[i][0];
-            col += dir[i][1];
+    std::array<sf::Vector2i, 4> dirs = {{
+        {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
+    }};
+    for (const auto& dir : dirs) {
+        sf::Vector2i curr = currentSquare;
+        bool hasCapturedPiece = false;
+        while(board.isValidMove(color, curr + dir) && !hasCapturedPiece) {
+            validMoves.push_back(curr + dir);
+            if (board.getPieceAt(curr + dir)) {
+                hasCapturedPiece = true;
+            }
+            curr += dir;
         }
     }
     return validMoves;

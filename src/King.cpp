@@ -8,13 +8,16 @@ std::vector<sf::Vector2i> King::getValidMoves(sf::Vector2i currentSquare, const 
     validMoves.reserve(8);   // King can move to 8 squares
 
     // Surrounding squares
-    std::array<std::array<int, 2>, 8> moves = {{{1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}}};
-    for (int i = 0; i < 8; ++i) {
-        int row = currentSquare.y + moves[i][0];
-        int col = currentSquare.x + moves[i][1];
-        if (board.isValidMove(this->getColor(), {row, col})) {
-            validMoves.push_back({row, col});
+    std::array<sf::Vector2i, 8> moves = {{
+        {1,  1}, {1,  0}, {1, -1}, {0, -1}, {-1, -1}, {-1,  0}, {-1,  1}, {0,  1}
+    }};
+    for (const auto& move : moves) {
+        if (board.isValidMove(color, currentSquare + move)) {
+            validMoves.push_back(currentSquare + move);
         }
     }
+
+    // TODO: castling, checked square
+
     return validMoves;
 }

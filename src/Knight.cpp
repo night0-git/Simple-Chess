@@ -8,12 +8,12 @@ std::vector<sf::Vector2i> Knight::getValidMoves(sf::Vector2i currentSquare, cons
     validMoves.reserve(8);  // Knight can move to 8 squares
     
     // The eight squares that a Knight could move to
-    std::array<std::array<int, 2>, 8> moves = {{{1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}}};
-    for (int i = 0; i < 8; i++) {
-        int row = currentSquare.y + moves[i][0];
-        int col = currentSquare.x + moves[i][1];
-        if (board.isValidMove(this->getColor(), {row, col})) {
-            validMoves.push_back({row, col});
+    std::array<sf::Vector2i, 8> moves = {{
+        {1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}
+    }};
+    for (const auto& move : moves) {
+        if (board.isValidMove(color, currentSquare + move)) {
+            validMoves.push_back(currentSquare + move);
         }
     }
     return validMoves;

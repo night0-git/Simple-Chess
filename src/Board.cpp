@@ -47,25 +47,45 @@ Piece* Board::getPieceAt(sf::Vector2i square) const {
 }
 
 std::unique_ptr<Piece> Board::movePiece(sf::Vector2i src, sf::Vector2i dest) {
+    enPassantTargetSquare.reset();
+
     if (!isWithinBoard(src) || !isWithinBoard(dest)) {
         return nullptr;
     }
     // Return nullptr if src is empty
-    if (!grid[src.y][src.x]) {
+    if (!grid[src.x][src.y]) {
         return nullptr;
     }
 
-    // srcPiece takes ownership of the piece from src, leave src as nullptr
-    std::unique_ptr<Piece> srcPiece = std::move(grid[src.y][src.x]);
-    // destPiece takes ownership of whaterver is in dest
-    std::unique_ptr<Piece> destPiece = std::move(grid[dest.y][dest.x]);
-    // Onwership is transferred from srcPiece to dest square
-    grid[dest.y][dest.x] = std::move(srcPiece);
+    std::unique_ptr<Piece> srcPiece = takePieceAt(src);
+    std::unique_ptr<Piece> destPiece = takePieceAt(dest);
+
+    // Update en passant state
+    if (srcPiece->getType() == PieceType::Pawn && std::abs(src.x - dest.x) == 2) {
+        int forward = (srcPiece->getColor() == PieceColor::Black ? 1 : -1);
+        enPassantTargetSquare = src + sf::Vector2i{forward, 0};
+    }
+
+    placePieceAt(dest, std::move(srcPiece));
+    grid[dest.x][dest.y]->hasMoved = true;
 
     // Return the ownership of the captured piece
     return destPiece;
 }
 
+std::unique_ptr<Piece> Board::takePieceAt(sf::Vector2i square) {
+    if (!isWithinBoard(square)) {
+        return nullptr;
+    }
+    return std::move(grid[square.x][square.y]);
+}
+
+void Board::placePieceAt(sf::Vector2i square, std::unique_ptr<Piece> piece) {
+    if (!isWithinBoard(square)) {
+        return;
+    }
+    grid[square.x][square.y] = std::move(piece);
+}
 
 bool Board::isValidMove(PieceColor srcColor, sf::Vector2i dest) const {
     if (isWithinBoard(dest)) {
@@ -81,4 +101,8 @@ bool Board::isValidMove(PieceColor srcColor, sf::Vector2i dest) const {
 
 bool Board::isWithinBoard(sf::Vector2i square) const {
     return (square.x >= 0 && square.x < SIZE && square.y >= 0 && square.y < SIZE);
+}
+
+std::optional<sf::Vector2i> Board::getEnPassantTarget() const {
+    return enPassantTargetSquare;
 }
