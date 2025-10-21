@@ -1,6 +1,12 @@
 #include "Piece.h"
 
-Piece::Piece(PieceType type_, PieceColor color_) : type(type_), color(color_) {}
+Piece::Piece(PieceType type_, PieceColor color_) : 
+    type(type_),
+    color(color_),
+    hasMoved(false) // A new piece has not yet moved
+{
+
+}
 
 PieceType Piece::getType() const {
     return type;
@@ -9,5 +15,3 @@ PieceType Piece::getType() const {
 PieceColor Piece::getColor() const {
     return color;
 }
-
-

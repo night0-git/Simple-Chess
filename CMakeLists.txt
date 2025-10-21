@@ -17,11 +17,17 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
-    src/Game.cpp
     src/Board.cpp
     src/Piece.cpp
     src/Utils.cpp
     src/GameWindow.cpp
+    src/Rook.cpp
+    src/Knight.cpp
+    src/Bishop.cpp
+    src/Queen.cpp
+    src/King.cpp
+    src/Pawn.cpp
+    src/ResourceManager.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/include")

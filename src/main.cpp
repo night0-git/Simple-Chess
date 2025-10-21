@@ -1,9 +1,8 @@
-#include "piece.h"
-#include "board.h"
+#include "GameWindow.h"
 
 int main() {
-    Board b;
-    b.printBoard();
+    GameWindow game;
+    game.run();
 
     return 0;
 }
